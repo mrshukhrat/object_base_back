@@ -5,11 +5,17 @@ from .models import Regions
 from .models import District
 from .models import Product
 from .models import Objects_main
+from .models import Objects_contract
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'description', 'price']
+
+class Objects_contractSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Objects_contract
+        fields = ['id']
 
 
 class Object_mainSerializer(serializers.ModelSerializer):
@@ -22,12 +28,13 @@ class Object_mainSerializer(serializers.ModelSerializer):
                 'object_goal_id',
                 'object_desk_id',
                 'object_desk1_id',
-                'images',
+                'images1',
+                'images2',
+                'images3',
+                'images4',
+                'images5',
                 'contracts_file',
                 'object_age',
-                'regions',
-                'district',
-                'address',
                 'k_number',
                 'author',
                 'lat',
@@ -41,7 +48,12 @@ class Object_mainSerializer(serializers.ModelSerializer):
                 'contracts',
                 'marked',
                 'district_name',
-                'regions_name'
+                'regions_name',
+                'regions',
+                'district',
+                'address',
+                'address_id',
+                'user_id'
         ]
 
 class RegionsSerializer(serializers.ModelSerializer):
@@ -60,4 +72,4 @@ from django.contrib.auth.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email','first_name','last_name')
+        fields = ('id', 'username', 'email','first_name','last_name','is_active')

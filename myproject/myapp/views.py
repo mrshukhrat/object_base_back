@@ -8,8 +8,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate, login
 from .serializers import UserSerializer
 from .serializers import RegionsSerializer
+from .serializers import Objects_contractSerializer
 from .serializers import Object_mainSerializer
 from .models import Regions
+from .models import Objects_contract
 from .serializers import DistrictSerializer
 from .models import District
 from .models import Objects_main
@@ -17,6 +19,7 @@ from rest_framework import generics
 from rest_framework import  permissions
 from .permissions import IsProductOwner
 from .permissions import IsObjectOwner
+from .permissions import IsObjectContractOwner
 from rest_framework import viewsets
 from .models import Product
 from .serializers import ProductSerializer
@@ -30,6 +33,26 @@ class ObjectViewSet(viewsets.ModelViewSet):
     queryset = Objects_main.objects.all()
     serializer_class = Object_mainSerializer
     permission_classes = [permissions.IsAuthenticated, IsObjectOwner]
+    def get_queryset(self):
+            queryset = Objects_main.objects.all()
+
+            # Filter products based on query parameters
+            name = self.request.query_params.get('name', None)
+            category = self.request.query_params.get('category', None)
+            # Add more filters as needed
+
+            if name:
+                queryset = queryset.filter(name__icontains=name)
+            if category:
+                queryset = queryset.filter(category__icontains=category)
+            # Add more filters as needed
+
+            return queryset
+
+class ObjectContractViewSet(viewsets.ModelViewSet):
+    queryset = Objects_contract.objects.all()
+    serializer_class = Objects_contractSerializer
+    permission_classes = [permissions.IsAuthenticated, IsObjectContractOwner]
 
 class RegionsAPIView(generics.ListAPIView):
     queryset=Regions.objects.all()
